@@ -19,39 +19,17 @@ var values = map[rune]int{
 
 func romanToInt(s string) int {
     total := 0
-    lastUnit := rune(s[len(s)-1])
+    prev := 0
+
     
     for i := len(s) - 1; i >= 0; i-- {
-        currentRune := rune(s[i])
-
-        fmt.Printf("lastRune: %#U, currentRune: %#U\n", lastUnit, currentRune)
-        switch currentRune {
-        case 'I':
-            if lastUnit == 'V' || lastUnit == 'X' {
-                total -= values[currentRune]
-            } else {
-                total += values[currentRune]
-            }
-        case 'X':
-            if lastUnit == 'L' || lastUnit == 'C' {
-                total -= values[currentRune]
-            } else {
-                total += values[currentRune]
-            }
-        case 'C':
-            if lastUnit == 'D' || lastUnit == 'M' {
-                total -= values[currentRune]
-                fmt.Printf("subtracting %v from total (now %v)", values[currentRune], total)
-            } else {
-                total += values[currentRune]
-            }
-        default:
-            total += values[currentRune]
+        curr := values[rune(s[i])]
+        if curr < prev {
+            total -= curr
+        } else {
+            total += curr
         }
-
-        if i>0 && (rune(s[i-1]) != currentRune) {
-            lastUnit = currentRune
-        }
+        prev = curr
     }
     
     return total
